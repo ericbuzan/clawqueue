@@ -1,0 +1,115 @@
+<html><head><title>CLAWQUEUE</title>
+<style type="text/css">
+table{border-collapse: collapse;}
+td, th, table{
+    border: 1pt solid black;
+    padding: 5pt;
+}
+#messages{
+    height: 100pt;
+    width: 600pt;
+    vertical-align: top;
+}
+
+</style>
+</head>
+<body>
+
+<table id="messages"><tr><td>
+Messages:
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+</td></tr></table><br />
+
+
+<table>
+    <tr>
+        <th>Ticket #</th>
+        <th>Queue #</th>
+        <th>Name</th>
+        <th>Badge ID</th>
+        <th>Status</th>
+        <th>Score</th>
+        <th>Last Updated</th>
+        <th>Do Something</th>
+    </tr>
+    {% for player in player_data %}
+        <tr>
+        {% for item in player %}
+            <td>{{ item }}</td>
+        {% endfor %}
+        <td>
+        {% if player[4]=='inactive' %}
+        <a href="queue?do=forcecall_{{ player[3] }}"><button class="forcecall"">Force call</button></a>
+        {% elif player[4]=='called' %}
+        <a href="queue?do=queue_{{ player[3] }}"><button class="queue">In line</button></a>
+        <a href="queue?do=kick_{{ player[3] }}"><button class="kick">Kick</button></a>
+        {% elif player[4]=='queued' %}
+        <a href="queue?do=topofqueue_{{ player[3] }}"><button class="topofqueue">Top of queue</button></a>
+        <a href="queue?do=kick_{{ player[3] }}"><button class="kick">Kick</button></a>
+        {% elif player[4]=='playing' %}
+        <a href="queue?do=finish_{{ player[3] }}"><button class="finish">Finish</button></a>
+        {% else %}
+        done?
+        {% endif %}
+        </td></tr>
+    {% endfor %}
+
+</table>
+
+<br /><br />
+
+<table>
+    <tr>
+        <th>Ticket #</th>
+        <th>Queue #</th>
+        <th>Name</th>
+        <th>Badge ID</th>
+        <th>Status</th>
+        <th>Score</th>
+        <th>Last Updated</th>
+        <th>Unkick</th>
+    </tr>
+    {% for player in kicked %}
+        <tr>
+        {% for item in player %}
+            <td>{{ item }}</td>
+        {% endfor %}
+        <td>
+        <a href="queue?do=unkick_{{ player[3] }}"><button class="unkick"">Unkick</button></a>
+        </td></tr>
+    {% endfor %}
+</table>
+
+<br /><br />
+
+<table>
+    <tr>
+        <th>Ticket #</th>
+        <th>Queue #</th>
+        <th>Name</th>
+        <th>Badge ID</th>
+        <th>Status</th>
+        <th>Score</th>
+        <th>Last Updated</th>
+        <th>Do Something</th>
+    </tr>
+    {% for player in finished %}
+        <tr>
+        {% for item in player %}
+            <td>{{ item }}</td>
+        {% endfor %}
+        <td>
+        <a href="queue?do=unkick_{{ player[3] }}"><button class="unkick"">Return to Queue</button></a>
+        </td></tr>
+    {% endfor %}
+</table>
+
+</body></html>
