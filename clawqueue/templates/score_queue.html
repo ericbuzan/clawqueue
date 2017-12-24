@@ -1,0 +1,129 @@
+<html><head><title>CLAWQUEUE - Score Queue</title>
+<style type="text/css">
+table{border-collapse: collapse;}
+td, th, table{
+    border: 1pt solid black;
+    padding: 5pt;
+}
+form{
+    margin-bottom: 0pt;
+    display: inline;
+}
+
+#scorebox{
+    width: 20pt;
+}
+
+#master td:nth-child(6) {
+   display: none;
+}
+
+</style>
+<script type=text/javascript src='{{ url_for('static', filename='jquery.js') }}'></script>
+<script>
+function updateMessages(){
+    $.ajax({
+        url: 'get_messages',
+        timeout: 2000,
+        success: function(data){
+            $("#messages").html(data)
+        }
+    });
+};
+
+function updateStatus(){location.reload(true);}
+
+$(document).ready(function(){
+    updateMessages();
+    setInterval(updateMessages,2000);
+});
+</script>
+</head>
+<body>
+
+<div id="messages"></div><br />
+<a href="admin_queue"><button>Refresh Queue</button></a>
+
+<h3>Master Queue</h3>
+<table id="master">
+    <tr>
+        <th>Ticket #</th>
+        <th>Queue #</th>
+        <th>Name</th>
+        <th>Badge ID</th>
+        <th>Status</th>
+        <th>Last Updated</th>
+        <th>Score</th>
+    </tr>
+    {% for player in player_data %}
+        <tr>
+        {% for item in player %}
+            <td>{{ item }}</td>
+        {% endfor %}
+        <td>
+        {% if player[4]=='playing' %}
+        <form action="score_queue">
+            <input type="hidden" name="command" value="finish" />
+            <input type="hidden" name="id" value="{{ player[3] }}" />
+            <input type="text" id="scorebox" name="score" />
+            <input type="submit" value="Score"/>
+        </form>
+        {% endif %}
+        </td></tr>
+    {% endfor %}
+
+</table>
+
+<br /><br />
+
+<h3>Kicked Players</h3>
+<table>
+    <tr>
+        <th>Ticket #</th>
+        <th>Queue #</th>
+        <th>Name</th>
+        <th>Badge ID</th>
+        <th>Status</th>
+        <th>Score</th>
+        <th>Last Updated</th>
+    </tr>
+    {% for player in kicked %}
+        <tr>
+        {% for item in player %}
+            <td>{{ item }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+
+<br /><br />
+
+<h3>Finished Players</h3>
+<table>
+    <tr>
+        <th>Ticket #</th>
+        <th>Queue #</th>
+        <th>Name</th>
+        <th>Badge ID</th>
+        <th>Status</th>
+        <th>Score</th>
+        <th>Last Updated</th>
+        <th>Rescore</th>
+    </tr>
+    {% for player in finished %}
+        <tr>
+        {% for item in player %}
+            <td>{{ item }}</td>
+        {% endfor %}
+        <td>
+        <form action="admin_queue" >
+            <input type="hidden" name="command" value="finish" />
+            <input type="hidden" name="id" value="{{ player[3] }}" />
+            <input type="text" id="scorebox" name="score" />
+            <input type="submit" value="Rescore"/>
+        </form>
+        </td></tr>
+    {% endfor %}
+</table>
+
+</body></html>

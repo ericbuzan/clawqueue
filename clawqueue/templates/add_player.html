@@ -1,0 +1,52 @@
+<html><head><title>CLAWQUEUE - Add or remove player</title>
+<style type="text/css">
+table{border-collapse: collapse;}
+td, th, table{
+    border: 1pt solid black;
+    padding: 5pt;
+}
+</style>
+<script>
+function remove(name,badgeid){
+    if (confirm("Remove "+name+" "+badgeid+"?") == true){
+        window.location.href = 'add_player?command=remove&name='+name+'&id='+badgeid
+    }
+}
+</script>
+</head>
+<body>
+<h3>Add Player to CLAWQUEUE</h3>
+<form action="add_player">
+    <input type="hidden" name="command" value="add_player" />
+    Name: <input type="text" name="name"/><br />
+    Max 12 characters<br /><br />
+    Badge ID: <input type="text" name="id"/><br /><br />
+    <input type="submit" value="Submit"/>
+</form>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<h3>Players</h3>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Badge ID</th>
+        <th>Updated</th>
+        <th>Remove</th>
+    </tr>
+    {% for player in players %}
+        <tr>
+        {% for item in player %}
+            <td>{{ item }}</td>
+        {% endfor %}
+        <td><button onclick="remove('{{player[0]}}',{{ player[1] }})">Remove</button></td></tr>
+    {% endfor %}
+</table></body></html>
