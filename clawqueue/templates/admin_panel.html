@@ -9,15 +9,22 @@ td, th, table{
 <script>
 function remove(name,badgeid){
     if (confirm("Remove "+name+" "+badgeid+"?") == true){
-        window.location.href = 'add_player?command=remove&name='+name+'&id='+badgeid
+        window.location.href = 'admin_panel?command=remove&name='+name+'&id='+badgeid
+    }
+}
+function wipe(){
+    if (confirm("Wipe ALL PLAYERS??") == true){
+        if (confirm("No seriously, this will delete EVERYONE") == true){
+            window.location.href = 'admin_panel?command=wipe'
+        }
     }
 }
 </script>
 </head>
 <body>
 <h3>Add Player to CLAWQUEUE</h3>
-<form action="add_player">
-    <input type="hidden" name="command" value="add_player" />
+<form action="admin_panel">
+    <input type="hidden" name="command" value="admin_panel" />
     Name: <input type="text" name="name"/><br />
     Max 12 characters<br /><br />
     Badge ID: <input type="text" name="id"/><br /><br />
@@ -33,6 +40,13 @@ function remove(name,badgeid){
     </ul>
   {% endif %}
 {% endwith %}
+
+<h3>Control Panel</h3>
+<a href="admin_panel?command=fillqueue">
+            <button class="fillqueue">Fill Queue</button></a>
+<a href="admin_panel?command=emptyqueue">
+            <button class="emptyqueue">Empty Queue</button></a>
+<button onclick="wipe()">Wipe All Players</button>
 
 <h3>Players</h3>
 <table>

@@ -51,47 +51,41 @@ Messages:
 <h3>Master Queue</h3>
 <table id="master">
     <tr>
-        <th>Ticket #</th>
-        <th>Queue #</th>
+        <th>Queue ID</th>
         <th>Name</th>
         <th>Badge ID</th>
         <th>Status</th>
-        <th style="display:none">
         <th>Last Updated</th>
         <th>Do Something</th>
     </tr>
     {% for player in player_data %}
-        {% if player[4]=='called' %}
-            {% if player[7] == 'late' %}
-                <tr style="color:magenta">
-            {% elif player[7] == 'warn' %}
-                <tr style="color:red">
-            {% else %}
-                <tr style="color:goldenrod">
-            {% endif %}  
-        {% elif player[4]=='queued' %}
-            <tr style="color:green">
-        {% elif player[4]=='playing' %}
+        {% if player['status']=='queued' %}
+            <tr style="color:green"> 
+        {% elif player['status']=='playing' %}
             <tr style="color:blue">
         {% else %}
             <tr>
         {% endif %}
-        {% for item in player %}{%if loop.index != 6 and loop.index != 8 %}
-            <td>{{ item }}</td>
-        {% endif %}{% endfor %}
+        <td>{{ player['qid'] }}</td>
+        <td>{{ player['name'] }}</td>
+        <td>{{ player['badgeid'] }}</td>
+        <td>{{ player['status'] }}</td>
+        <td>{{ player['updated'] }}</td>
         <td>
-        {% if player[4]=='inactive' %}
-        <a href="admin_queue?command=forcecall&id={{ player[3] }}"><button class="forcecall"">Force call</button></a>
-        {% elif player[4]=='called' %}
-        <a href="admin_queue?command=queue&id={{ player[3] }}"><button class="queue">In line</button></a>
-        <a href="admin_queue?command=kick&id={{ player[3] }}"><button class="kick">Kick</button></a>
-        {% elif player[4]=='queued' %}
-        <a href="admin_queue?command=topofqueue&id={{ player[3] }}"><button class="topofqueue">Top of queue</button></a>
-        <a href="admin_queue?command=kick&id={{ player[3] }}"><button class="kick">Kick</button></a>
-        {% elif player[4]=='playing' %}
+        {% if player['status']=='inactive' %}
+        <a href="admin_queue?command=forcequeue&id={{ player['badgeid'] }}">
+            <button class="forcequeue">Force queue</button></a>
+        <a href="admin_queue?command=kick&id={{ player['badgeid'] }}">
+            <button class="kick">Kick</button></a>
+        {% elif player['status']=='queued' %}
+        <a href="admin_queue?command=startplay&id={{ player['badgeid'] }}">
+            <button class="startplay">Start</button></a>
+        <a href="admin_queue?command=kick&id={{ player['badgeid'] }}">
+            <button class="kick">Kick</button></a>
+        {% elif player['status']=='playing' %}
         <form action="admin_queue">
             <input type="hidden" name="command" value="finish" />
-            <input type="hidden" name="id" value="{{ player[3] }}" />
+            <input type="hidden" name="id" value="{{ player['badgeid'] }}" />
             <input type="text" id="scorebox" name="score" />
             <input type="submit" value="Score"/>
         </form>
@@ -108,7 +102,6 @@ Messages:
 <h3>Kicked Players</h3>
 <table>
     <tr>
-        <th>Ticket #</th>
         <th>Queue #</th>
         <th>Name</th>
         <th>Badge ID</th>
@@ -133,7 +126,6 @@ Messages:
 <h3>Finished Players</h3>
 <table>
     <tr>
-        <th>Ticket #</th>
         <th>Queue #</th>
         <th>Name</th>
         <th>Badge ID</th>
@@ -150,11 +142,11 @@ Messages:
         <td>
         <form action="admin_queue" >
             <input type="hidden" name="command" value="finish" />
-            <input type="hidden" name="id" value="{{ player[3] }}" />
+            <input type="hidden" name="id" value="{{ player['badgeid'] }}" />
             <input type="text" id="scorebox" name="score" />
             <input type="submit" value="Rescore"/>
         </form>
-        <a href="admin_queue?command=unkick&id={{ player[3] }}"><button class="unkick"">Return to Queue</button></a>
+        <a href="admin_queue?command=unkick&id={{ player['badgeid'] }}"><button class="unkick"">Return to Queue</button></a>
         </td></tr>
     {% endfor %}
 </table>

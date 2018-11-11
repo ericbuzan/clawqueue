@@ -1,8 +1,7 @@
 drop table if exists players;
 
 create table players (
-  ticket integer primary key autoincrement,
-  queue integer default 9999999,
+  qid integer primary key autoincrement,
   name text not null,
   badgeid integer not null,
   status text default 'inactive',

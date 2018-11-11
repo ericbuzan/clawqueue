@@ -93,19 +93,16 @@ h1,.scorenum {
 </td><td id="calledcell">
 
 
-<span class="banner">REPORT TO QUEUE</span><span class="playername">
-{% if called|length == 0 %}<p class="spacing">Nobody!</p>{% endif %}
-{% for player in called %}
-    {% if player[3] == 'late' or player[3] == 'warn' %}
-        <p style="color:red" class="spacing">{{player [0]}} {{ player[1] }}</p>
-    {% else %}
-        <p class="spacing">{{player [0]}} {{ player[1] }}</p>
-    {% endif %}
+<span class="banner">NOW PLAYING</span><span class="playername">
+{% if playing|length == 0 %}<p class="spacing">Nobody!</p>{% endif %}
+{% for player in playing %}
+    <p class="spacing">{{player [0]}} {{ player[1] }}</p>
 {% endfor %}
 <br />
 </span>
-<span class="banner">COMING UP SOON</span><span class="playername">
-{% for player in soon %}
+<span class="banner">NEXT IN LINE</span><span class="playername">
+{% if queued|length == 0 %}<p class="spacing">Nobody!</p>{% endif %}
+{% for player in queued %}
     <p class="spacing">{{player [0]}} {{ player[1] }}</p>
 {% endfor %}
 </span>
