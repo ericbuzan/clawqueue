@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Grid Test</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+        function doWindowResize() {
+          
+          var scale;
+            
+          scale = Math.min(
+            $(window).width() / 640,    
+            $(window).height() / 360
+          );
+          
+          $(".wrapper").css({
+            transform: "translate(-50%, -50%) " + "scale(" + scale + ")"
+          });
+          
+        }
+
+        $(document).ready( function(){
+            $(window).resize(doWindowResize);
+            doWindowResize();
+        })
+    </script>
+
+
+    <style type="text/css">
+        body {
+          margin: 0px;
+          background-color: #4ff;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 2fr;
+            grid-template-rows: 1fr 1fr;
+            grid-gap: 5px;
+            background-color: #fff;
+            color: #444;
+            width: 630px;
+            height: 350px;
+            padding: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .box {
+            background-color: #444;
+            color: #fff;
+            padding: 5px;
+            font-size: 150%;
+        }
+
+        .leaderboard{
+            grid-column: 4;
+            grid-row: 1 / -1
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <div class="box leaderboard">Leaderboard</div>
+        <div class="box game_a">Game A</div>
+        <div class="box game_b">Game B</div>
+        <div class="box game_c">Game C</div>
+        <div class="box game_d">Game D</div>
+        <div class="box game_e">Game E</div>
+    </div>
+
+</body>
+</html>

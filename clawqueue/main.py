@@ -58,12 +58,12 @@ def scoreboard():
     topscores = []
     the_top_score = db.execute('SELECT max(score) from players').fetchone()[0]
     while True: 
-        people_with_this_score = db.execute('SELECT name,badgeid FROM players where score=? ORDER BY updated DESC',(the_top_score,)).fetchall()
+        people_with_this_score = db.execute('SELECT name,badgeid FROM players where score=? ORDER BY updated',(the_top_score,)).fetchall()
         if len(people_with_this_score) != 0:
             num_topscores = num_topscores + math.ceil(len(people_with_this_score)/NAMES_PER_ROW)
             if num_topscores > MAXNUM_TOPSCORES:
                 break
-            topscores.append((the_top_score, people_with_this_score))
+            topscores.append((the_top_score, people_with_this_score,len(people_with_this_score)))
         the_top_score = the_top_score - 1
         if the_top_score == 0:
             break
@@ -71,6 +71,28 @@ def scoreboard():
     playing = db.execute('SELECT name, badgeid, updated FROM players where status="playing" ORDER BY qid').fetchall()
 
     return render_template('scoreboard.html', playing=playing, topscores=topscores, queued=queued, NAMES_PER_ROW=NAMES_PER_ROW)
+
+@app.route('/scoreboard_nonwide')
+def scoreboard_nonwide():
+    db = get_db()
+    num_topscores = 0
+    topscores = []
+    the_top_score = db.execute('SELECT max(score) from players').fetchone()[0]
+    while True: 
+        people_with_this_score = db.execute('SELECT name,badgeid FROM players where score=? ORDER BY updated',(the_top_score,)).fetchall()
+        if len(people_with_this_score) != 0:
+            num_topscores = num_topscores + math.ceil(len(people_with_this_score)/NAMES_PER_ROW)
+            if num_topscores > MAXNUM_TOPSCORES:
+                break
+            topscores.append((the_top_score, people_with_this_score,len(people_with_this_score)))
+        the_top_score = the_top_score - 1
+        if the_top_score == 0:
+            break
+    queued = db.execute('SELECT name, badgeid, updated FROM players where status="queued" ORDER BY qid').fetchall()
+    playing = db.execute('SELECT name, badgeid, updated FROM players where status="playing" ORDER BY qid').fetchall()
+
+    return render_template('scoreboard _nonwide.html', playing=playing, topscores=topscores, queued=queued)
+
 
 @app.route('/admin_panel')
 def admin_panel():

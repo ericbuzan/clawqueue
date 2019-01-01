@@ -11,8 +11,8 @@
           var scale;
             
           scale = Math.min(
-            $(window).width() / 1280,    
-            $(window).height() / 720
+            $(window).width() / 1024,    
+            $(window).height() / 768
           );
           
           $(".wrapper").css({
@@ -47,8 +47,8 @@
         }
 
         .wrapper {
-            width: 1270px;
-            height: 710px;
+            width: 1014px;
+            height: 758px;
             margin: 0;
             position: absolute;
             top: 50%;
@@ -56,7 +56,7 @@
             transform: translate(-50%, -50%);
 
             text-align: center;
-            background: #444;
+            background: #000;
 
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -84,7 +84,8 @@
         }
 
         .banner {
-            font-size: 48px;
+            font-family: bricks;
+            font-size: 40px;
             padding: 6px;
         }
 
@@ -97,26 +98,29 @@
         }
 
         .queue_name {
-            font-size: 32px;
+            font-family: bricks;
+            font-size: 20px;
             background: black;
+            padding: 5px;
         }
 
         .queue_id {
-            font-size: 32px;
+            font-size: 28px;
             background: black;
             padding: 0px 6px;
             text-align: right;
         }
 
         .score {
-            padding: 2px;
+            font-family: bricks;
+            padding: 5px;
             background: black;
-            font-size: 48px;
+            font-size: 40px;
             vertical-align: middle;
         }
 
         .names {
-            padding: 2px;
+            padding: 5px;
             background: black;
             display: flex;
             flex-flow: row wrap;
@@ -124,11 +128,12 @@
         }
 
         .playername {
+            font-family: bricks;
             flex: 1 1 40%;
             background: black;
-            font-size: 32px;
+            font-size: 20px;
             text-align: center;
-            margin: 2px;
+            padding: 5px;
         }
 
 

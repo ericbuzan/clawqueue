@@ -1,0 +1,114 @@
+<html><head><title>CLAWQUEUE - Scoreboard</title>
+<style type="text/css">
+
+body{ background-color: black; color:white; font-family: sans-serif;}
+
+@font-face{
+    font-family: bricks;
+    src: url({{ url_for('static', filename='PrStart.ttf') }});
+}
+
+table{
+    vertical-align: bottom;
+    width: 100%;
+}
+
+td{
+    text-align: center;
+    border: 0px solid white;
+}
+
+h1,.scorenum {
+    font-family:bricks;
+    text-align: center;
+    font-size: 64px;
+}
+
+.banner {
+    font-family:bricks;
+    font-size: 40px;
+    padding: 5px;.
+}
+
+.playername {
+    font-family:bricks;
+    font-size: 36px;
+    padding: 5px;.
+}
+
+.spacing{
+    line-height: 35%;
+
+}
+
+.namecell{
+    width:25%;
+    padding: 5px;
+}
+
+.scoretier{
+    border: 1px solid white;
+    padding: 10px;.
+    text-align: center;
+}
+
+#scorecell{
+    width: 60%;
+    vertical-align: top;
+}
+#calledcell{
+    width: 40%;
+    vertical-align: top;
+}
+#bigtable{
+    width:98%;
+    margin-left:auto; 
+    margin-right:auto;
+    margin-top:30px;
+}
+
+</style>
+</head>
+<body>
+<table id="bigtable"><tr><td id="scorecell">
+
+<h1>TOP SCORES</h1>
+<table>
+{% set colours = ['magenta','dodgerblue','limegreen','yellow','orangered'] %}
+    {% for scorenum in topscores %}
+    {% set i=loop.index-1 %}
+        <tr><td class="scoretier"><div class="scorenum" style="color:{{ colours[i] }}">{{ scorenum[0] }}</div></td>
+        <td class="scoretier">
+            <table><tr>
+        {% for player in scorenum[1] %}
+            <td class='namecell'><span class="playername" style="color:{{ colours[i] }}">{{ player[0] }}</span></td>
+            {% if loop.index % NAMES_PER_ROW == 0 %}
+                </tr></table><table><tr>
+            {% endif %}
+        {% endfor %}
+        </tr></table>
+    {% endfor %}
+</table>
+
+</td><td id="calledcell">
+
+
+<span class="banner">NOW PLAYING</span><span class="playername">
+{% if playing|length == 0 %}<p class="spacing">Nobody!</p>{% endif %}
+{% for player in playing %}
+    <p class="spacing">{{player [0]}} {{ player[1] }}</p>
+{% endfor %}
+<br />
+</span>
+<span class="banner">NEXT IN LINE</span><span class="playername">
+{% if queued|length == 0 %}<p class="spacing">Nobody!</p>{% endif %}
+{% for player in queued %}
+    <p class="spacing">{{player [0]}} {{ player[1] }}</p>
+{% endfor %}
+</span>
+
+</td></tr></table>
+
+
+
+</body></html>
