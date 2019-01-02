@@ -17,7 +17,7 @@ app = Flask(__name__) # create the application instance :)
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'players.db'),
     SECRET_KEY='Sunny is a very nice kitty.',
-    DEBUG = True
+    DEBUG = False
 ))
 
 PEOPLE_IN_QUEUE = 10
@@ -49,15 +49,17 @@ def teardown_db(exception):
 
 @app.route('/')
 def hello():
-    return 'Welcome to CLAWQUEUE!'
+    return render_template('index.html')
 
 @app.route('/scoreboard')
 def scoreboard():
     db = get_db()
     num_topscores = 0
     topscores = []
-    the_top_score = db.execute('SELECT max(score) from players').fetchone()[0]
-    while True: 
+    the_top_score = db.execute('SELECT max(score) from players').fetchone()[0] or 0
+    while True:
+        if the_top_score == 0:
+            break
         people_with_this_score = db.execute('SELECT name,badgeid FROM players where score=? ORDER BY updated',(the_top_score,)).fetchall()
         if len(people_with_this_score) != 0:
             num_topscores = num_topscores + math.ceil(len(people_with_this_score)/NAMES_PER_ROW)
@@ -65,8 +67,7 @@ def scoreboard():
                 break
             topscores.append((the_top_score, people_with_this_score,len(people_with_this_score)))
         the_top_score = the_top_score - 1
-        if the_top_score == 0:
-            break
+        
     queued = db.execute('SELECT name, badgeid, updated FROM players where status="queued" ORDER BY qid').fetchall()
     playing = db.execute('SELECT name, badgeid, updated FROM players where status="playing" ORDER BY qid').fetchall()
 
@@ -77,8 +78,10 @@ def scoreboard_nonwide():
     db = get_db()
     num_topscores = 0
     topscores = []
-    the_top_score = db.execute('SELECT max(score) from players').fetchone()[0]
-    while True: 
+    the_top_score = db.execute('SELECT max(score) from players').fetchone()[0] or 0
+    while True:
+        if the_top_score == 0:
+            break
         people_with_this_score = db.execute('SELECT name,badgeid FROM players where score=? ORDER BY updated',(the_top_score,)).fetchall()
         if len(people_with_this_score) != 0:
             num_topscores = num_topscores + math.ceil(len(people_with_this_score)/NAMES_PER_ROW)
@@ -86,8 +89,7 @@ def scoreboard_nonwide():
                 break
             topscores.append((the_top_score, people_with_this_score,len(people_with_this_score)))
         the_top_score = the_top_score - 1
-        if the_top_score == 0:
-            break
+        
     queued = db.execute('SELECT name, badgeid, updated FROM players where status="queued" ORDER BY qid').fetchall()
     playing = db.execute('SELECT name, badgeid, updated FROM players where status="playing" ORDER BY qid').fetchall()
 
@@ -208,4 +210,4 @@ def wipe():
 
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0')
+    app.run(host= '0.0.0.0',port=80)

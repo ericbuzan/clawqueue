@@ -21,10 +21,15 @@
           
         }
 
+	function updateStatus(){location.reload(true);}
+
         $(document).ready( function(){
             $(window).resize(doWindowResize);
             doWindowResize();
+	    setInterval(updateStatus,10000);
         })
+
+
     </script>
 
     <style type="text/css">
